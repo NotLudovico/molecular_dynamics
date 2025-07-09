@@ -13,3 +13,4 @@ wheels/
 __marimo__/
 .ipynb_checkpoints/
 .virtual_documents/
+_site/

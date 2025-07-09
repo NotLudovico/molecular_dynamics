@@ -93,7 +93,7 @@ def _():
     return (verlet,)
 
 
-@app.cell
+@app.cell(hide_code=True)
 def _(mo):
     mo.md(
         r"""
@@ -111,9 +111,9 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    # Potentials
+    ## Potentials
 
-    ## Hooke Potential
+    ### Hooke Potential
     $$F_H(q) = -kq$$
 
     ```python
@@ -135,7 +135,7 @@ def hooke(q, k=1):
 def _(mo):
     mo.md(
         r"""
-    ## Lennard-Jones Potential
+    ### Lennard-Jones Potential
     $$U_{LJ}(q) = 4 \epsilon \left[ \left(\frac{\sigma}{q}\right)^{12} - \left(\frac{\sigma}{q}\right)^6\right]$$
     thus, by computing the gradient we get an expression for the force:
 
@@ -157,11 +157,17 @@ def lj(q, epsilon=1, sigma=1):
 
 @app.cell(hide_code=True)
 def _(mo):
+    mo.md(r"""## Simulation""")
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
     q_curr = mo.ui.number(value=2, step=0.01)
     q_prev = mo.ui.number(value=2, step=0.01)
 
     mass = mo.ui.number(value=1, start=0.1, step=0.1)
-    hooke_dt = mo.ui.number(value=0.4, step=0.001)
+    hooke_dt = mo.ui.number(value=0.4, step=0.01)
     hooke_k = mo.ui.number(value=1, start=0)
     theoretical_hooke = mo.ui.switch()
 
@@ -172,73 +178,46 @@ def _(mo):
     stride = mo.ui.number(value=1, start=1, step=1)
     simulation_time = mo.ui.number(value=40)
 
-    mo.vstack(
+    mo.hstack(
         [
-            mo.md("## Initial conditions"),
-            mo.hstack(
+            mo.vstack(
                 [
-                    mo.vstack(
-                        [
-                            mo.md(r"Initial Position ($q_{curr}$)"),
-                            mo.md(r"Previous Position ($q_{prev}$)"),
-                        ]
-                    ),
-                    mo.vstack([q_curr, q_prev]),
+                    mo.md(r"Initial Position ($q_{curr}$)"),
+                    mo.md(r"Previous Position ($q_{prev}$)"),
+                    mo.md("---"),
+                    mo.md("Simulation Time"),
+                    mo.md("Stride"),
+                    mo.md("---"),
+                    mo.md(r"Lennard-Jones timestep ($\Delta t$)"),
+                    mo.md(r"Depth ($\epsilon$)"),
+                    mo.md(r"Zero Energy point ($\sigma$)"),
+                    mo.md("---"),
+                    mo.md(r"Mass ($m$)"),
+                    mo.md(r"Hooke Timestep ($\Delta t$)"),
+                    mo.md(r"Elastic Constant ($k$)"),
+                    mo.md("Show theoretical solution"),
                 ],
             ),
-            mo.md("## Hooke Config"),
-            mo.hstack(
+            mo.vstack(
                 [
-                    mo.vstack(
-                        [
-                            mo.md(r"Mass ($m$)"),
-                            mo.md(r"Hooke Timestep ($\Delta t$)"),
-                            mo.md(r"Elastic Constant ($k$)"),
-                            mo.md("Show theoretical solution"),
-                        ]
-                    ),
-                    mo.vstack(
-                        [
-                            mass,
-                            hooke_dt,
-                            hooke_k,
-                            theoretical_hooke,
-                        ]
-                    ),
-                ],
-            ),
-            mo.md("## Lennard-Jones Config"),
-            mo.hstack(
-                [
-                    mo.vstack(
-                        [
-                            mo.md(r"Lennard-Jones timestep ($\Delta t$)"),
-                            mo.md(r"Depth ($\epsilon$)"),
-                            mo.md(r"Zero Energy point ($\sigma$)"),
-                        ]
-                    ),
-                    mo.vstack(
-                        [
-                            lj_dt,
-                            lj_e,
-                            lj_sigma,
-                        ]
-                    ),
-                ],
-            ),
-            mo.md("## Time and Stride"),
-            mo.hstack(
-                [
-                    mo.vstack([mo.md("Simulation Time"), mo.md("Stride")]),
-                    mo.vstack(
-                        [
-                            simulation_time,
-                            stride,
-                        ]
-                    ),
+                    q_curr,
+                    q_prev,
+                    mo.md(r"---"),
+                    simulation_time,
+                    stride,
+                    mo.md(r"---"),
+                    lj_dt,
+                    lj_e,
+                    lj_sigma,
+                    mo.md(r"---"),
+                    mass,
+                    hooke_dt,
+                    hooke_k,
+                    theoretical_hooke,
                 ]
             ),
         ],
+        widths=[None, 1],
     )
     return (
         hooke_dt,
@@ -338,11 +317,11 @@ def _(lj_e, lj_sigma, mo, r_min):
         [
             mo.md("### Minimum"),
             mo.md(
-                f" $r_m = \sqrt[6]{2} \ \sigma =  {r_min:.2f}  \ \ \ \ \Rightarrow \ \ \ \ V(r_m) = -\epsilon = {-lj_e.value}$"
+                rf" $q_{{min}} = 2^{{1/6}}  \sigma =  {r_min:.2f}  \quad \Rightarrow \quad V(q_{{min}}) = -\epsilon = {-lj_e.value}$"
             ),
             mo.md("### Zero Energy Point"),
             mo.md(
-                f"$r_0 = \sigma = {lj_sigma.value} \ \ \ \ \Rightarrow \ \ \ \ V(r_0)=0$ "
+                rf"$q_0 = \sigma = {lj_sigma.value} \quad \Rightarrow \quad V(q_0)=0$ "
             ),
         ]
     )

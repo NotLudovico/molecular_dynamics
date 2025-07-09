@@ -48,17 +48,26 @@ def _(E, N1, N2, math, mo, np):
     std = math.sqrt(abs(variance))
 
     # Textual output
-    mo.vstack(
+    mo.hstack(
         [
-            mo.md(
-                f"Total configurations: ${int(math.comb(N1.value + N2.value, E.value))}$"
+            mo.vstack(
+                [
+                    mo.md(f"**Total configurations**: "),
+                    mo.md(f"**Mean energy**: "),
+                    mo.md(f"**Variance**: "),
+                    mo.md(f"**Standard deviation**: "),
+                ]
             ),
-            mo.md(
-                f"Mean energy: ${mean_energy:.4f}$"
+            mo.vstack(
+                [
+                    mo.md(f"${int(math.comb(N1.value + N2.value, E.value))}$"),
+                    mo.md(f"${mean_energy:.4f}$"),
+                    mo.md(f"${variance:.4f}$"),
+                    mo.md(f"${std:.4f}$"),
+                ]
             ),
-            mo.md(f"Variance: ${variance:.4f}$"),
-            mo.md(f"Standard deviation: ${std:.4f}$")
-        ]
+        ],
+        widths=[None, 1],
     )
     return i_vals, mean_energy, probs
 
