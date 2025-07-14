@@ -11,7 +11,7 @@ def verlet():
     q = 0
 
     for i in range(1000):
-        q_next = 2*q - q_0 + force(q) * dt**2 / m
+        q_next = 2 * q - q_0 + force(q) * dt**2 / m
         q_0 = q
         q = q_next
 
@@ -35,7 +35,7 @@ def leapfrog():
 
     p += p + f * dt / 2
     for i in range(1000):
-        q += p/m * dt
+        q += p / m * dt
         f = force(q)
         p += f * dt
 
@@ -46,10 +46,10 @@ def position_verlet():
     f = force(q)
 
     for i in range(1000):
-        q += p/m * dt**2
+        q += p / m * dt**2
         f = force(q)
         p += f * dt
-        q += p/m * dt**2
+        q += p / m * dt**2
 
 
 def forcefast(q):
@@ -69,7 +69,7 @@ def wrong_multiple_ts():
 
     for i in range(1000):
         p += f * dt / 2
-        q += p/m * dt
+        q += p / m * dt
         f1 = forcefast(q)
         if i % 5 == 0:
             f2 = forceslow(q)
@@ -89,7 +89,7 @@ def multiple_ts():
         p += f1 * ddt / 2
         if i % 10 == 0:
             p += f2 * dt / 2
-        q += p/m * ddt
+        q += p / m * ddt
         f1 = forcefast(q)
         p += f1 * ddt / 2
 
