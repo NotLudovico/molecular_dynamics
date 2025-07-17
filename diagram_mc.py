@@ -1,5 +1,7 @@
 import random
 import math
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class Diagram:
@@ -170,4 +172,18 @@ if __name__ == "__main__":
     print(f"Simulation value for <sigma_x>: {mx:.6f}")
     print(f"Simulation value for <sigma_z>: {mz:.6f}")
     print(f"Acceptance Rate: {acceptance_rate:.2%}")
-    print("-" * 27)
+    print("-" * 40)
+
+    # Sweep in h
+    print("\n\nSweeping: ")
+    mx_sweep = []
+    h_sweep = np.linspace(-1, 1, 20)
+    for h in h_sweep:
+        (mx, _, _) = diagram.simulate(runs=1_000_000, warm_up=50_000)
+        print(f"For h={h}")
+        print(f"Simulation value for <sigma_x>: {mx:.6f}")
+        print("-" * 40)
+        mx_sweep.append(mx)
+
+    plt.plot(h_sweep, mx_sweep)
+    plt.show()
