@@ -179,7 +179,8 @@ if __name__ == "__main__":
     mx_sweep = []
     h_sweep = np.linspace(-1, 1, 20)
     for h in h_sweep:
-        (mx, _, _) = diagram.simulate(runs=1_000_000, warm_up=50_000)
+        diagram = Diagram(beta=0.5, h=h, gamma=0.4)
+        (mx, _, _) = diagram.simulate(runs=5_000_000, warm_up=50_000)
         print(f"For h={h}")
         print(f"Simulation value for <sigma_x>: {mx:.6f}")
         print("-" * 40)
